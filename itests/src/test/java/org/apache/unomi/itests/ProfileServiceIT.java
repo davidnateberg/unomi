@@ -189,7 +189,7 @@ public class ProfileServiceIT extends BaseIT {
 
             IntStream.range(1, 3).forEach(index -> {
                 final String profileAlias = profileID + "_alias_" + index;
-                profileService.addAliasToProfile(profileID, profileAlias, "clientID");
+                profileService.addAliasToProfile(profileID, profileAlias, "clientID" + index);
             });
 
             refreshPersistence();
@@ -205,13 +205,16 @@ public class ProfileServiceIT extends BaseIT {
             storedProfile = profileService.load(profileID + "_alias_2");
             assertNotNull(storedProfile);
             assertEquals(profileID, storedProfile.getItemId());
-        } finally {
-            profileService.delete(profileID, false);
 
+            PartialList<ProfileAlias> aliasList = profileService.findProfileAliases(profileID, 0, 10, null);
+            assertEquals(3, aliasList.size());
+        } finally {
             IntStream.range(1, 3).forEach(index -> {
                 final String profileAlias = profileID + "_alias_" + index;
-                persistenceService.remove(profileAlias, ProfileAlias.class);
+                profileService.removeAliasFromProfile(profileID, profileAlias, "clientID" + index);
             });
+
+            profileService.delete(profileID, false);
         }
     }
 

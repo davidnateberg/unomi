@@ -1,0 +1,7 @@
+{
+  "operationName": null,
+  "variables": {
+    "alias": "testAlias"
+  },
+  "query": "query ($alias: ID!) {\n  cdp {\n    getProfileAlias(alias: $alias) {\n      alias\n      creationTime\n      modifiedTime\n      profileID {\n        id\n        client {\n          ID\n          title\n        }\n      }\n    }\n  }\n}\n"
+}
